@@ -7,16 +7,17 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { api } from "~/utils/api";
 import { TRPCError } from "@trpc/server";
+import { useContact } from "~/modules/contact/hook/useContact";
 export function ContactSection() {
-    const response = api.contact.submit.useMutation({
-      onSuccess: () => {
-        alert("Form submitted successfully!");
-    },
-    onError: (error) => {
-        console.error("Error submitting form:", error);
-        alert("Failed to submit form. Please try again later.");
-      }
-  })
+  //   const response = api.contact.submit.useMutation({
+  //     onSuccess: () => {
+  //       alert("Form submitted successfully!");
+  //   },
+  //   onError: (error) => {
+  //       console.error("Error submitting form:", error);
+  //       alert("Failed to submit form. Please try again later.");
+  //     }
+  // })
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -33,9 +34,24 @@ export function ContactSection() {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
+  const { submit, isLoading } = useContact({
+    onSuccess: () => {
+      setLoading(false);
+      console.log("Form submitted successfully");
+    },
+    onDuplicate: () => {
+      console.log("Duplicated");
+      setLoading(false);
+    },
+    onError: (message) => {
+      console.log(message);
+      setLoading(false);
+    }
+  })
+
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // setLoading(true);
+    setLoading(true);
 
     // Simple validation example
     // const newErrors: { [key: string]: string } = {};
@@ -55,19 +71,7 @@ export function ContactSection() {
 
     setErrors({}); // Clear errors if validation passes
     console.log("Submitting:", formData);
-    try {
-    const result = await response.mutateAsync(formData);
-
-    } catch (error) {
-      if (error instanceof TRPCError ) {
-        console.error("TRPC Error:", error);
-        if (error.code === "CONFLICT") {
-          alert("Email already exists.");
-        } else {
-          alert("Failed to create user: " + error.message);
-        }
-      }
-    }
+    submit(formData);
     // setTimeout(() => {
     //   setLoading(false);
     //   alert("Form submitted!");

@@ -9,7 +9,6 @@ export const contactRouter = createTRPCRouter({
     .input(ContactInputSchema)
     .mutation(async ({ input }) => {
       try {
-
         return await submitContact(input);
       } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {

@@ -14,9 +14,9 @@ model Contact {
   id        String   @id @default(cuid())
   firstName String
   lastName  String
-  phone     String
-  email     String
+  phone     String @unique
+  email     String @unique
   createdAt DateTime @default(now())
 
-  @@unique([email, phone])
+  // @@unique([email, phone])
 }
