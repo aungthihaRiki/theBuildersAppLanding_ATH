@@ -8,12 +8,13 @@ import type { AppProps } from "next/app";
 
 import "~/styles/globals.css";
 import MainLayout from "~/modules/common/MainLayout";
+import { api } from "~/utils/api";
 
 // const geist = Geist({
 //   subsets: ["latin"],
 // });
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AppThemeProvider>
       <MainLayout>
@@ -22,3 +23,5 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     </AppThemeProvider>
   );
 }
+
+export default api.withTRPC(MyApp);

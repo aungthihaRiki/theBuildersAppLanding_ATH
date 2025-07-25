@@ -5,7 +5,19 @@ import { useState } from "react";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
+import { api } from "~/utils/api";
+import { TRPCError } from "@trpc/server";
 export function ContactSection() {
+    const response = api.contact.submit.useMutation({
+      onSuccess: () => {
+        alert("Form submitted successfully!");
+    },
+    onError: (error) => {
+        console.error("Error submitting form:", error);
+        alert("Failed to submit form. Please try again later.");
+      }
+  })
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -21,9 +33,9 @@ export function ContactSection() {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
+    // setLoading(true);
 
     // Simple validation example
     // const newErrors: { [key: string]: string } = {};
@@ -35,16 +47,31 @@ export function ContactSection() {
     if (!formData.email) newErrors.email = "Email is required";
 
     if (Object.keys(newErrors).length > 0) {
+      console.log("Validation errors:", Object.keys(newErrors));
       setErrors(newErrors);
       setLoading(false);
       return;
     }
 
+    setErrors({}); // Clear errors if validation passes
     console.log("Submitting:", formData);
-    setTimeout(() => {
-      setLoading(false);
-      alert("Form submitted!");
-    }, 1000);
+    try {
+    const result = await response.mutateAsync(formData);
+
+    } catch (error) {
+      if (error instanceof TRPCError ) {
+        console.error("TRPC Error:", error);
+        if (error.code === "CONFLICT") {
+          alert("Email already exists.");
+        } else {
+          alert("Failed to create user: " + error.message);
+        }
+      }
+    }
+    // setTimeout(() => {
+    //   setLoading(false);
+    //   alert("Form submitted!");
+    // }, 1000);
   };
 
   return (
