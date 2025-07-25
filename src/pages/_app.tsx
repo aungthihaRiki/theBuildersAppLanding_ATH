@@ -1,20 +1,24 @@
-import { type AppType } from "next/app";
+// import { type Session } from "next-auth";
+// import { SessionProvider } from "next-auth/react";
+// import { type AppType } from "next/app";
+// import { api } from "~/utils/api";
 import { Geist } from "next/font/google";
-
-import { api } from "~/utils/api";
+import { AppThemeProvider } from "~/components/providers/theme-provider"
+import type { AppProps } from "next/app";
 
 import "~/styles/globals.css";
+import MainLayout from "~/modules/common/MainLayout";
 
-const geist = Geist({
-  subsets: ["latin"],
-});
+// const geist = Geist({
+//   subsets: ["latin"],
+// });
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className={geist.className}>
+    <AppThemeProvider>
+      <MainLayout>
       <Component {...pageProps} />
-    </div>
+      </MainLayout>
+    </AppThemeProvider>
   );
-};
-
-export default api.withTRPC(MyApp);
+}
