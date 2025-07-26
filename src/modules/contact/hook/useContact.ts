@@ -1,15 +1,14 @@
 import { api } from "~/utils/api";
 import type { ContactInput } from "../logic/ContactSchema";
 import { TRPCClientError } from "@trpc/client";
-export const  useContact = ({
-    onSuccess,
-    onError,
-    onDuplicate
-} : {
+
+type ContactOutputs = {
     onSuccess?: ( data: unknown ) => void,
     onError?: (message: string) => void,
     onDuplicate?: () => void
-} = {}) => {
+}
+
+export const  useContact = ({onSuccess, onDuplicate, onError}: ContactOutputs = {}) => {
     const mutation = api.contact.submit.useMutation();
     const submit = async (formData: ContactInput) => {
         try {
