@@ -7,7 +7,6 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { useContact } from "~/modules/contact/hook/useContact";
 import { contactMessages } from "~/modules/landing/data/contact";
-import { error } from "console";
 export function ContactSection() {
 
   const [formData, setFormData] = useState({
@@ -61,10 +60,10 @@ export function ContactSection() {
 
     setErrors({}); // Clear errors if validation passes
     console.log("Submitting:", formData);
-    submit(formData);
+    void submit(formData);
   };
 
-  const showMessage = submitted || alreadyExists;
+  const showMessage: boolean = submitted || alreadyExists;
 
   const title = alreadyExists
     ? contactMessages.duplicateTitle

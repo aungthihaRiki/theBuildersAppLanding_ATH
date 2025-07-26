@@ -33,7 +33,7 @@ export const useContact = ({
         "code" in error.data &&
         (error.data as { code?: string }).code === "CONFLICT"
       ) {
-        onDuplicate?.();
+        void onDuplicate?.();
         return;
       }
     }
