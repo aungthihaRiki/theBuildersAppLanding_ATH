@@ -16,13 +16,13 @@ export function Header() {
       </Link>
 
       <div className="flex items-center gap-2">
-        <button
+        <Button
           onClick={() => setMenuOpen(!menuOpen)}
           className="text-foreground text-2xl hover:text-primary transition-colors duration-200"
           aria-label="Menu"
         >
           ☰
-        </button>
+        </Button>
       </div>
 
       {menuOpen && (
