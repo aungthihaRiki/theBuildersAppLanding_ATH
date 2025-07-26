@@ -4,11 +4,11 @@ import type { ContactInput } from "./ContactSchema";
 
 function generateTestPhoneNumber() {
   const len = [7, 8, 9][Math.floor(Math.random() * 3)];
-  const suffix = [...Array(len)]
+  const suffix = new Array(len)
+    .fill(0)
     .map(() => Math.floor(Math.random() * 10))
     .join("");
-  const phone = `09${suffix}`;
-  return phone;
+  return `09${suffix}`;
 }
 
 function generateTestEmail() {
