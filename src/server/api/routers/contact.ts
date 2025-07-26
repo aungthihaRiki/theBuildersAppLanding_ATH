@@ -11,16 +11,15 @@ export const contactRouter = createTRPCRouter({
       try {
         return await submitContact(input);
       } catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-          if (error.code === "P2002") {
-            // This error means a unique constraint failed
-            throw new TRPCError({
-              code: "CONFLICT",
-              message: "Already exists user",
-            });
-          } else {
-            console.error("Prisma error code:", error.code);
-          }
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === "P2002"
+        ) {
+          // This error means a unique constraint failed
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "Already exists user",
+          });
         }
 
         throw new TRPCError({

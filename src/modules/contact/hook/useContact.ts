@@ -17,10 +17,7 @@ export const  useContact = ({
             onSuccess?.(result);
             return
         } catch (error) {
-            // console.log(error)
             if (error instanceof TRPCClientError  && error.data?.code === "CONFLICT") {
-                console.log("TRPC Error");
-                console.log("TRPC Code:", error.data?.code);
                 onDuplicate?.();
                 return
             }
