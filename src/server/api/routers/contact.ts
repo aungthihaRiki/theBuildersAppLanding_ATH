@@ -9,7 +9,7 @@ export const contactRouter = createTRPCRouter({
     .input(ContactInputSchema)
     .mutation(async ({ input }) => {
       try {
-        return await submitContact(input);
+        return await submitContact(input, "notion");
       } catch (error) {
         if (
           error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -21,10 +21,12 @@ export const contactRouter = createTRPCRouter({
             message: "Already exists user",
           });
         }
-
+        
+        console.error(error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to create user",
+          message: "Failed to submit contact form",
+          cause: error,
         });
       }
     }),
