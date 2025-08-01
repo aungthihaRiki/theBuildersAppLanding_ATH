@@ -1,4 +1,3 @@
-// src/server/notion.ts
 import { Client } from "@notionhq/client";
 
 export const notion = new Client({
