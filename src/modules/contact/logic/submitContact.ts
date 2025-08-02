@@ -1,8 +1,9 @@
-import { databaseId, notion } from "~/server/notion";
+import { notion } from "~/server/notion";
 import type { ContactInput } from "../logic/ContactSchema";
 import { db } from "~/server/db";
 import { isUnique } from "./isUnique";
 import { TRPCError } from "@trpc/server";
+import { env } from "~/env";
 export const submitContact = async (data: ContactInput, type: string) => {
   if (type === "prisma") {  // for prisma
     return db.contact.create({
@@ -20,7 +21,7 @@ export const submitContact = async (data: ContactInput, type: string) => {
 
     try {
       const response = await notion.pages.create({
-        parent: { database_id: databaseId as string },
+        parent: { database_id: env.NOTION_DATABASE_ID },
         properties: {
           "First Name": {
             rich_text: [{ text: { content: data.firstName } }],
