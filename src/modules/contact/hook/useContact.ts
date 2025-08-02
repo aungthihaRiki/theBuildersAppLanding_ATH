@@ -20,11 +20,6 @@ export const useContact = ({
       void onSuccess?.(result);
       return;
     } catch (error: unknown) {
-      // if (error instanceof TRPCClientError && error.data?.code === "CONFLICT") {
-      //   void onDuplicate?.();
-      //   return;
-      // }
-      // console.dir(error);
 
       if (
         error instanceof TRPCClientError &&
